@@ -114,3 +114,4 @@ ngrok http 5000
 ## Reference
 
 * [Flask Heroku](https://github.com/zachwill/flask_heroku)
+* [[Bot] Line Echo Bot on Django](http://lee-w-blog.logdown.com/posts/1134898-line-echo-bot-on-django)
