@@ -91,7 +91,7 @@ def message_text(event):
         reply= location + u"的天氣為" + out
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text=reply))
     except:
-        line_bot_api.reply_message(event.reply_token,TextMessage(text=origin.content))
+        line_bot_api.reply_message(event.reply_token,TextMessage(text="yo~台灣沒這個地方～或是請愛用繁體「臺」ex「臺南市」"))
 
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
