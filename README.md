@@ -97,7 +97,7 @@ https://xxxxxxx.herokuapp.com/callback
 
 ```
 gem install foreman
-brew cask install cgrok
+brew cask install ngrok
 
 ```
 foreman 會執行 Procfile 將機械人跑在本地端的 http://0.0.0.0:5000

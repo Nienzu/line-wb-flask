@@ -66,32 +66,37 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
-    is_wx_or = u"天氣"
-    if(is_wx_or not in event.message.text):
+    keyWordWeather = u"天氣"
+    #If user don't want to know weather, echo what user input instead.And return t
+    if(keyWordWeather not in event.message.text):
        line_bot_api.reply_message(event.reply_token,TextMessage(text=event.message.text))
        return
-    check = u"市縣"
-    if event.message.text.find(check[0])>0:
-        index = event.message.text.find(check[0])
+    #find the location users ask in the string of user input  
+    keyWordLocation = u"市縣"
+    if event.message.text.find(keyWordLocation[0])>0:
+        locationIndex = event.message.text.find(keyWordLocation[0])
     else :
-        index = event.message.text.find(check[1])
+        locationIndex = event.message.text.find(keyWordLocation[1])
 
-    location = event.message.text[index-2:index+1]
-    url="http://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?locationName="+event.message.text[index-2:index+1]+"&elementName=Wx"
+    locationIndexStart = locationIndex - 2
+    locationIndexEnd = locationIndex + 1
+    location = event.message.text[locationIndexStart:locationIndexEnd]
+    url="http://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?locationName="+location+"&elementName=Wx"
     header = {"Authorization":os.getenv('APIKEY', None)}
     origin = requests.get(url,headers=header)
     body = json.loads(origin.content)
-    #check current time 
+    #Determind which prediction of time interval for the weather of the location.
     try:
-        time_pre = body['records']['location'][0]['weatherElement'][0]['time']
-        for expect in time_pre:
-            H_time = datetime.strptime(expect['startTime'],"%Y-%m-%d %H:%M:%S")
-            if(datetime > H_time):
-                out = expect['parameter']['paramterName']
-        reply= location + u"的天氣為" + out
+        timeIntervalPredict = body['records']['location'][0]['weatherElement'][0]['time']
+        for possibleTime in timeIntervalPredict:
+            #type of time info: string -> datetime
+            timeInterval = datetime.strptime(possibleTime['startTime'],"%Y-%m-%d %H:%M:%S")
+            if(datetime > timeInterval):
+                discription = possibleTime['parameter']['paramterName']
+        reply= location + u"的天氣為" + discription
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text=reply))
     except:
-        line_bot_api.reply_message(event.reply_token,TextMessage(text="yo~台灣沒這個地方～或是請愛用繁體「臺」ex「臺南市」"))
+        line_bot_api.reply_message(event.reply_token,TextMessage(text="yo~台灣沒這個地方～\n或是請愛用繁體「臺」ex「臺南市」"))
 
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
