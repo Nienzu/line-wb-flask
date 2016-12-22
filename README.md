@@ -22,11 +22,17 @@ gevent
 gunicorn
 simplejson
 requests
+honcho
 ```
 
-* Ruby 
+* Ruby (Not using anymore)
 
-管理 local serve
+[foreman](https://github.com/ddollar/foreman)
+manage local server's processes via ProcFile.
+
+Instead of using foreman in Ruby, using honcho in python in this porject is a better choice, for 
+[honcho](https://github.com/nickstenning/honcho)
+ is foreman's python port
 
 ```
 gem install foreman
@@ -93,10 +99,10 @@ https://xxxxxxx.herokuapp.com/callback
 ### Run localy
 ---
 
-如果是正在開發中的 LINE-bot，每次要測試新功能或是除錯就要將檔案push到 heroku 的話其實是很麻煩的，因此以下的步驟是將開發流城透過第三方工具建立在本機上(但仍須網路來將網址轉換)
+如果是正在開發中的 LINE-bot，每次要測試新功能或是除錯就要將檔案 push 到 heroku 的話其實是很麻煩的，因此以下的步驟是將開發流程透過第三方工具建立在本機上(但仍須網路來將網址轉換)
 
 ```
-gem install foreman
+pip install -r requirements.txt 
 brew cask install ngrok
 
 ```
@@ -104,7 +110,7 @@ foreman 會執行 Procfile 將機械人跑在本地端的 http://0.0.0.0:5000
 ngrok 是協助我們將 local 的 http server 指向 ngrok 提供的 server
 
 ```
-foreman start 
+honcho start 
 ngrok http 5000
 ```
 最後把 ngrok 的 https 貼到 LINE developers 的 webhook
